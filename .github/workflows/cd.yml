@@ -55,9 +55,9 @@ jobs:
             .
 
       # Run database migrations BEFORE deploying
-      - name: Run database migrations
+      - name: push database schema
         run: |
-          npm run db:migrate
+          npm run db:push
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
