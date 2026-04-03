@@ -8,7 +8,6 @@ jobs:
   Deploy:
     runs-on: ubuntu-latest
     
-    # Add DATABASE_URL as an environment variable for the entire job
     env:
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
@@ -19,34 +18,30 @@ jobs:
       - name: Setup Node.js 
         uses: actions/setup-node@v4
         with:
-          node-version: '20' # Use the Node.js version your project requires
-          cache: 'npm'       # optional: speeds up installs by caching dependencies
+          node-version: '20'
+          cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci      # Use npm ci for a clean, reproducible install (recommended for CI/CD)
+        run: npm ci
 
       - name: Build the app
         run: npm run build
 
-      # Setup gcloud CLI
       - name: Setup gcloud CLI
         uses: google-github-actions/setup-gcloud@v2
         with:
           project_id: notely-491704
-          install_components: 'beta'  # Fixed: added space after colon
+          install_components: 'beta'
 
-      # Step 6: Authenticate with GCP
       - name: Authenticate to GCP
         uses: google-github-actions/auth@v2
         with:
           credentials_json: ${{ secrets.GCP_CREDENTIALS }}
 
-      # Step 7: Configure Docker for Artifact Registry
       - name: Configure Docker for Artifact Registry
         run: |
           gcloud auth configure-docker us-central1-docker.pkg.dev
 
-      # Step 8: Build and push Docker image to Artifact Registry
       - name: Build and push Docker image
         run: |
           gcloud builds submit \
@@ -54,14 +49,11 @@ jobs:
             --region=us-central1 \
             .
 
-      # Run database migrations BEFORE deploying
       - name: Run migrations
-        run: |
-          npm run db:migrate
-          env:
-           DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: npm run db:migrate
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
-      # Deploy to Cloud Run
       - name: Deploy to Cloud Run
         run: |
           gcloud run deploy notely \
