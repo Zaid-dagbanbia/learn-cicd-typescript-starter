@@ -58,8 +58,8 @@ jobs:
       - name: Run migrations
         run: |
           npm run db:migrate
-        # env:
-          # DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          env:
+           DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
       # Deploy to Cloud Run
       - name: Deploy to Cloud Run
