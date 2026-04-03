@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate",
+    "db:migrate": "drizzle-kit migrate --force",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
     "build": "npx tsc",
