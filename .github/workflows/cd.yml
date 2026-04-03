@@ -55,11 +55,11 @@ jobs:
             .
 
       # Run database migrations BEFORE deploying
-      - name: push database schema
+      - name: Run migrations
         run: |
-          npm run db:push
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          npm run db:migrate
+        # env:
+          # DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
       # Deploy to Cloud Run
       - name: Deploy to Cloud Run
